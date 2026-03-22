@@ -1,6 +1,30 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" },
-    { "source": "/(.*)", "destination": "/index.html" }
+  "version": 2,
+  "builds": [
+    {
+      "src": "*.mp4",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "server.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "css/**",
+          "js/**",
+          "pages/**",
+          "*.html",
+          "*.jpg",
+          "*.jpeg",
+          "*.png",
+          "*.json",
+          "admin-lugares.html"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    { "src": "/(.*\\.mp4)", "dest": "/$1" },
+    { "src": "/(.*)", "dest": "/server.js" }
   ]
 }
