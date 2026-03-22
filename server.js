@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 27017;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors({
@@ -16,7 +16,11 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname)));
+
+// Servir archivos estáticos (CSS, JS, imágenes, videos, etc.)
+app.use(express.static(path.join(__dirname), {
+    index: false // No servir index automáticamente, lo manejamos manualmente
+}));
 
 // Configuración de Mongoose
 mongoose.set('strictQuery', false);
@@ -303,8 +307,17 @@ app.get('/api/reviews', getReviews);
 app.post('/api/reviews', postReview);
 app.delete('/api/reviews/:id', deleteReview);
 
-// Ruta para manejar todas las demás solicitudes y servir el archivo index.html
+// Ruta para manejar las páginas del sitio: solo sirve index.html para rutas
+// que NO sean archivos estáticos con extensión conocida
 app.get('*', (req, res) => {
+    const ext = path.extname(req.path);
+    // Si tiene extensión de archivo conocida que no se sirvió antes, devolver 404
+    const staticExtensions = ['.css', '.js', '.jpg', '.jpeg', '.png', '.gif',
+        '.mp4', '.json', '.ico', '.svg', '.woff', '.woff2', '.ttf', '.eot', '.webp', '.webm'];
+    if (ext && staticExtensions.includes(ext.toLowerCase())) {
+        return res.status(404).send('Archivo no encontrado');
+    }
+    // Para cualquier otra ruta (páginas), servir index.html
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
