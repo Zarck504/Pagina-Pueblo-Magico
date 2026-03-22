@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lugares Turísticos - Huasca de Ocampo</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos para la sección de reseñas */
+        .seccion-reseñas {
+            padding: 4rem 0;
+            background-color: #f9f9f9;
+        }
+        
+        .contenedor-reseñas {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .titulo-seccion {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 3rem;
+            position: relative;
+            padding-bottom: 1rem;
+        }
+        
+        .titulo-seccion::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: #e74c3c;
+        }
+        
+        .grid-reseñas {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .reseña-tarjeta {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .reseña-tarjeta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .reseña-encabezado {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .reseña-usuario {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .reseña-usuario i {
+            font-size: 1.5rem;
+            color: #7f8c8d;
+        }
+        
+        .reseña-usuario span {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .reseña-fecha {
+            font-size: 0.85rem;
+            color: #7f8c8d;
+        }
+        
+        .reseña-cuerpo h3 {
+            color: #2c3e50;
+            margin: 0 0 0.75rem 0;
+            font-size: 1.25rem;
+        }
+        
+        .reseña-cuerpo p {
+            color: #555;
+            line-height: 1.6;
+            margin: 0 0 1rem 0;
+        }
+        
+        .reseña-calificacion {
+            color: #f1c40f;
+            font-size: 1.25rem;
+            margin-top: 1rem;
+        }
+        
+        .formulario-reseña {
+            background: white;
+            border-radius: 10px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 2rem;
+        }
+        
+        .u-form-area {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .u-form-title {
+            font-size: 1.75rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .u-form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .u-form-subtitle {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .u-form-style {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+        
+        .u-form-style:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        textarea.u-form-style {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .u-form-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 6px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .u-form-btn:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        .login-required-message {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .login-required-message p {
+            margin: 0;
+            color: #7f8c8d;
+        }
+        
+        .auth-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+        
+        .auth-link:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        
+        /* Estilos para las estrellas de calificación */
+        .calificacion-grupo {
+            margin: 1rem 0;
+        }
+        
+        .estrellas-calificacion {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+        
+        .estrellas-calificacion input[type="radio"] {
+            display: none;
+        }
+        
+        .estrellas-calificacion label {
+            color: #ddd;
+            font-size: 1.75rem;
+            padding: 0 2px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        
+        .estrellas-calificacion label:hover,
+        .estrellas-calificacion label:hover ~ label,
+        .estrellas-calificacion input[type="radio"]:checked ~ label {
+            color: #f1c40f;
+        }
+        
+        .estrellas-calificacion input[type="radio"]:checked ~ label {
+            color: #f1c40f;
+        }
+        
+        /* Estilos para el mensaje cuando no hay reseñas */
+        .no-reviews {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 1rem;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            margin: 1rem 0;
+            color: #7f8c8d;
+        }
+        
+        .no-reviews i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #bdc3c7;
+            display: block;
+        }
+        
+        .no-reviews p {
+            font-size: 1.1rem;
+            margin: 0.5rem 0 0;
+            color: #7f8c8d;
+        }
+        
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            .grid-reseñas {
+                grid-template-columns: 1fr;
+            }
+            
+            .formulario-reseña {
+                padding: 1.5rem;
+            }
+            
+            .u-form-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal de inicio de sesión/registro -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <!-- Formulario de Inicio de Sesión -->
+            <div id="loginFormContainer">
+                <h2 style="text-align: center; margin-bottom: 25px;">Iniciar Sesión</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="username">Usuario o Correo Electrónico</label>
+                        <input type="text" id="username" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="btn-login">Iniciar Sesión</button>
+                    <div class="register-link">
+                        ¿No tienes una cuenta? <a href="#" id="showRegister">Regístrate</a>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Formulario de Registro -->
+            <div id="registerFormContainer" style="display: none;">
+                <h2 style="text-align: center; margin-bottom: 25px;">Crear Cuenta</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regName">Nombre Completo</label>
+                        <input type="text" id="regName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Correo Electrónico</label>
+                        <input type="email" id="regEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regUsername">Nombre de Usuario</label>
+                        <input type="text" id="regUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Contraseña</label>
+                        <input type="password" id="regPassword" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Confirmar Contraseña</label>
+                        <input type="password" id="regConfirmPassword" name="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn-login">Registrarse</button>
+                    <div class="register-link">
+                        ¿Ya tienes una cuenta? <a href="#" id="showLogin">Iniciar Sesión</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <header>
+        <nav>
+            <div class="logo">Huasca Mágica</div>
+            <div class="nav-right">
+                <div class="nav-pill">
+                    <div class="nav-pill-container">
+                        <a href="../index.html" class="nav-pill-btn">Inicio</a>
+                        <a href="#" class="nav-pill-btn active">Lugares</a>
+                        <a href="gastronomia.html" class="nav-pill-btn">Gastronomía</a>
+                        <a href="eventos.html" class="nav-pill-btn">Eventos</a>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 400 60"
+                          height="60"
+                          width="400"
+                          overflow="visible"
+                          class="nav-pill-outline"
+                        >
+                          <rect
+                            stroke-width="5"
+                            fill="transparent"
+                            height="60"
+                            width="400"
+                            y="0"
+                            x="0"
+                            pathLength="100"
+                            class="nav-pill-rect"
+                          ></rect>
+                        </svg>
+                    </div>
+                </div>
+                <div id="loginButtonContainer">
+                    <a href="#" id="loginBtn" class="login-btn"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+                    <a href="#" id="logoutBtn" class="login-btn" style="display: none; background-color: #dc3545;">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <div class="hero" style="background: #000;">
+            <div class="hero-video-wrapper">
+                <video class="hero-video" src="../lugares.mp4" autoplay muted loop playsinline></video>
+                <div class="hero-video-overlay"></div>
+            </div>
+            <div class="hero-content">
+                <h1>Lugares Turísticos</h1>
+                <p>Explora cascadas, bosques, haciendas y miradores que hacen de Huasca de Ocampo un destino único en México.</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="lugares-container">
+        <section class="lugar-detalle">
+            <div class="lugar-info">
+                <h2>Prismas Basálticos</h2>
+                <div class="lugar-galeria">
+                    <img src="../img/prismas-1.jpg" alt="Prismas Basálticos vista general">
+                    <div class="galeria-mini">
+                        <img src="../img/prismas-2.jpg" alt="Vista cercana">
+                        <img src="../img/prismas-3.jpg" alt="Cascada">
+                        <img src="../img/prismas-4.jpg" alt="Panorámica">
+                    </div>
+                </div>
+                <div class="lugar-descripcion">
+                    <h3>Maravilla Geológica</h3>
+                    <p>Los Prismas Basálticos son formaciones rocosas únicas en el mundo, con columnas de basalto de hasta 30 metros de altura que se formaron hace millones de años por el enfriamiento de lava volcánica. El sitio cuenta con senderos, puentes colgantes y miradores para admirar esta maravilla natural.</p>
+                    
+                    <div class="lugar-datos">
+                        <div class="dato">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Ubicación</h4>
+                                <p>Carretera a Santa María Regla, Huasca de Ocampo</p>
+                            </div>
+                        </div>
+                        <div class="dato">
+                            <i class="far fa-clock"></i>
+                            <div>
+                                <h4>Horario</h4>
+                                <p>Lunes a Domingo: 9:00 AM - 6:00 PM</p>
+                            </div>
+                        </div>
+                        <div class="dato">
+                            <i class="fas fa-ticket-alt"></i>
+                            <div>
+                                <h4>Costo de entrada</h4>
+                                <p>Adultos: $80 MXN | Niños: $40 MXN</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lugar-recomendaciones">
+                        <h4>Recomendaciones</h4>
+                        <ul>
+                            <li>Usar calzado cómodo y antiderrapante</li>
+                            <li>Llevar agua y protector solar</li>
+                            <li>No tirar basura</li>
+                            <li>Respetar las señalizaciones</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="otros-lugares">
+            <h2>Otros Lugares que te pueden interesar</h2>
+            <div class="grid-lugares">
+                <div class="lugar-card">
+                    <img src="../img/hacienda-santa-maria.jpg" alt="Hacienda Santa María">
+                    <h3>Hacienda Santa María</h3>
+                    <p>Antigua hacienda minera con hermosos jardines y restaurante</p>
+                    <a href="#" class="btn-ver-mas">Ver más</a>
+                </div>
+                <div class="lugar-card">
+                    <img src="../img/puente-de-dios.jpg" alt="Puente de Dios">
+                    <h3>Puente de Dios</h3>
+                    <p>Formación natural con albercas de agua cristalina</p>
+                    <a href="#" class="btn-ver-mas">Ver más</a>
+                </div>
+                <div class="lugar-card">
+                    <img src="../img/peña-del-aire.jpg" alt="Peña del Aire">
+                    <h3>Peña del Aire</h3>
+                    <p>Mirador natural con impresionantes vistas al valle</p>
+                    <a href="#" class="btn-ver-mas">Ver más</a>
+                </div>
+            </div>
+        </section>
+        <!-- Sección de Experiencias de Visitantes -->
+        <section class="seccion-reseñas">
+            <div class="contenedor-reseñas">
+                <h2 class="titulo-seccion">Experiencias de Visitantes</h2>
+                
+                <div class="grid-reseñas" id="reseñas-container">
+                    <!-- Las reseñas se cargarán aquí dinámicamente -->
+                    <div class="no-reviews">
+                        <i class="fas fa-comment-alt"></i>
+                        <p>No hay reseñas aún. ¡Sé el primero en compartir tu experiencia!</p>
+                    </div>
+                </div>
+
+                <!-- Formulario para dejar reseña -->
+                <div class="formulario-reseña" id="formulario-reseña">
+                    <div class="u-form-area">
+                        <p class="u-form-title">Comparte tu experiencia en lugares</p>
+                        <div id="login-required-message" class="login-required-message">
+                            <p>Para publicar una reseña, por favor <a href="#" id="show-login-lugares" class="auth-link u-form-link">inicia sesión</a> o <a href="#" id="show-register-lugares" class="auth-link u-form-link">regístrate</a>.</p>
+                        </div>
+                        <form id="form-reseña-lugares" class="review-form">
+                            <div class="u-form-group">
+                                <label class="u-form-subtitle" for="titulo-lugares">Título de tu reseña</label>
+                                <input class="u-form-style" type="text" id="titulo-lugares" name="titulo" required>
+                            </div>
+                            <div class="u-form-group">
+                                <label class="u-form-subtitle">Calificación</label>
+                                <div class="calificacion-grupo">
+                                    <div class="estrellas-calificacion">
+                                        <input type="radio" id="lugares-estrella5" name="calificacion" value="5">
+                                        <label for="lugares-estrella5" title="5 estrellas">★</label>
+                                        <input type="radio" id="lugares-estrella4" name="calificacion" value="4">
+                                        <label for="lugares-estrella4" title="4 estrellas">★</label>
+                                        <input type="radio" id="lugares-estrella3" name="calificacion" value="3" checked>
+                                        <label for="lugares-estrella3" title="3 estrellas">★</label>
+                                        <input type="radio" id="lugares-estrella2" name="calificacion" value="2">
+                                        <label for="lugares-estrella2" title="2 estrellas">★</label>
+                                        <input type="radio" id="lugares-estrella1" name="calificacion" value="1">
+                                        <label for="lugares-estrella1" title="1 estrella">★</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="u-form-group">
+                                <label class="u-form-subtitle" for="comentario">Tu experiencia</label>
+                                <textarea class="u-form-style" id="comentario" name="comentario" required></textarea>
+                            </div>
+                            <div class="u-form-group">
+                                <label class="u-form-subtitle" for="fotos">Subir fotos (opcional)</label>
+                                <input class="u-form-style" type="file" id="fotos" name="fotos" multiple accept="image/*">
+                            </div>
+                            <button type="submit" class="u-form-btn">Publicar reseña</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Oficina de Turismo</h3>
+                <p>Plaza Principal s/n, Centro</p>
+                <p>Huasca de Ocampo, Hidalgo</p>
+                <p>Email: turismo@huasca.gob.mx</p>
+                <p>Tel: 771 123 4567</p>
+            </div>
+            <div class="footer-section">
+                <h3>Síguenos</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i> Facebook</a>
+                    <a href="#"><i class="fab fa-instagram"></i> Instagram</a>
+                    <a href="#"><i class="fab fa-twitter"></i> Twitter</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Huasca de Ocampo, Pueblo Mágico - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <!-- Incluir SweetAlert2 para mensajes bonitos -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Incluir el script de autenticación -->
+    <script src="../js/auth.js"></script>
+
+    <script>
+        // Script para manejar el modal
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('loginModal');
+            const loginBtn = document.getElementById('loginBtn');
+            const closeBtn = document.querySelector('.close');
+            const showRegister = document.getElementById('showRegister');
+            const showLogin = document.getElementById('showLogin');
+            const loginFormContainer = document.getElementById('loginFormContainer');
+            const registerFormContainer = document.getElementById('registerFormContainer');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const userProfile = document.getElementById('userProfile');
+
+            // Mostrar modal al hacer clic en Iniciar Sesión
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    modal.style.display = 'block';
+                    loginFormContainer.style.display = 'block';
+                    registerFormContainer.style.display = 'none';
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            // Cerrar modal al hacer clic en la X
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+
+            // Cerrar modal al hacer clic fuera del contenido
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Mostrar formulario de registro
+            if (showRegister) {
+                showRegister.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    loginFormContainer.style.display = 'none';
+                    registerFormContainer.style.display = 'block';
+                });
+            }
+
+            // Mostrar formulario de inicio de sesión
+            if (showLogin) {
+                showLogin.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    loginFormContainer.style.display = 'block';
+                    registerFormContainer.style.display = 'none';
+                });
+            }
+
+            // Manejar el envío del formulario de inicio de sesión
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const username = document.getElementById('username').value;
+                    
+                    // Simular inicio de sesión exitoso
+                    setAuthState(true, { 
+                        name: username, 
+                        email: username + '@example.com' 
+                    });
+                    
+                    // Cerrar el modal
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    
+                    // Limpiar el formulario
+                    loginForm.reset();
+                });
+            }
+
+            // Manejar el envío del formulario de registro
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const name = document.getElementById('regName').value;
+                    const email = document.getElementById('regEmail').value;
+                    
+                    // Simular registro exitoso
+                    setAuthState(true, { 
+                        name: name, 
+                        email: email 
+                    });
+                    
+                    // Cerrar el modal
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    
+                    // Mostrar mensaje de éxito
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Registro exitoso!',
+                        text: 'Bienvenido a Huasca Mágica',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    
+                    // Limpiar el formulario
+                    registerForm.reset();
+                });
+            }
+            
+            // Verificar estado de autenticación al cargar la página
+            if (isAuthenticated()) {
+                const user = getCurrentUser();
+                if (user) {
+                    updateUserProfileUI(user);
+                }
+            }
+            // Funciones de autenticación
+            function isAuthenticated() {
+                return localStorage.getItem('isAuthenticated') === 'true';
+            }
+
+            function getCurrentUser() {
+                const user = localStorage.getItem('user');
+                return user ? JSON.parse(user) : null;
+            }
+
+            function setAuthState(authenticated, userData = null) {
+                localStorage.setItem('isAuthenticated', authenticated);
+                if (userData) {
+                    localStorage.setItem('user', JSON.stringify(userData));
+                    updateUserProfileUI(userData);
+                    updateReviewFormVisibility(true);
+                } else {
+                    localStorage.removeItem('user');
+                    updateUserProfileUI(null);
+                    updateReviewFormVisibility(false);
+                }
+            }
+
+            function updateUserProfileUI(user) {
+                const userProfile = document.getElementById('userProfile');
+                const loginBtn = document.getElementById('loginBtn');
+                
+                if (user && userProfile) {
+                    userProfile.innerHTML = `
+                        <div class="user-profile">
+                            <span class="user-name">${user.name}</span>
+                            <button id="logoutBtn" class="btn-logout">Cerrar Sesión</button>
+                        </div>
+                    `;
+                    
+                    if (loginBtn) loginBtn.style.display = 'none';
+                    userProfile.style.display = 'block';
+                    
+                    // Manejar cierre de sesión
+                    document.getElementById('logoutBtn').addEventListener('click', function() {
+                        setAuthState(false);
+                        window.location.reload();
+                    });
+                } else if (loginBtn) {
+                    loginBtn.style.display = 'block';
+                    if (userProfile) userProfile.style.display = 'none';
+                }
+            }
+
+            // Función para actualizar la visibilidad del formulario de reseñas
+            function updateReviewFormVisibility(isAuthenticated) {
+                const loginMessage = document.getElementById('login-required-message');
+                const reviewForm = document.getElementById('form-reseña');
+                
+                if (isAuthenticated) {
+                    if (loginMessage) loginMessage.style.display = 'none';
+                    if (reviewForm) reviewForm.style.display = 'block';
+                } else {
+                    if (loginMessage) loginMessage.style.display = 'block';
+                    if (reviewForm) reviewForm.style.display = 'none';
+                }
+            }
+
+            // Inicializar visibilidad del formulario de reseñas
+            updateReviewFormVisibility(isAuthenticated());
+        
+            // Cargar reseñas al iniciar
+            loadReviews();
+
+            // Función para cargar reseñas
+            function loadReviews() {
+                return fetch('http://localhost:27017/api/reviews?experience=lugares', {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la respuesta del servidor');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const reviewsContainer = document.getElementById('reseñas-container');
+                    if (!reviewsContainer) return;
+                    
+                    // Limpiar todas las reseñas existentes
+                    reviewsContainer.innerHTML = '';
+                    
+                    // Verificar si hay datos válidos
+                    if (data.success && Array.isArray(data.data)) {
+                        // Filtrar solo reseñas válidas
+                        const validReviews = data.data.filter(review => 
+                            review.userEmail && review.comment && review.rating
+                        );
+                        
+                        if (validReviews.length > 0) {
+                            // Ordenar reseñas por fecha (más recientes primero)
+                            const sortedReviews = [...validReviews].sort((a, b) => {
+                                return new Date(b.createdAt) - new Date(a.createdAt);
+                            });
+                            
+                            // Agregar cada reseña al contenedor
+                            sortedReviews.forEach(review => {
+                                addNewReviewToUI(review);
+                            });
+                        } else {
+                            // Mostrar mensaje si no hay reseñas
+                            showNoReviewsMessage(reviewsContainer);
+                        }
+                    } else {
+                        // Mostrar mensaje si no hay datos o hay un error en la estructura
+                        showNoReviewsMessage(reviewsContainer);
+                    }
+                    
+                    // Actualizar la interfaz según el estado de autenticación
+                    const user = getCurrentUser();
+                    if (user) {
+                        updateReviewFormUI(user);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al cargar las reseñas:', error);
+                    const reviewsContainer = document.getElementById('reseñas-container');
+                    if (reviewsContainer && reviewsContainer.children.length === 0) {
+                        showNoReviewsMessage(reviewsContainer);
+                    }
+                });
+            }
+        
+            // Función auxiliar para mostrar mensaje de no hay reseñas
+            function showNoReviewsMessage(container) {
+                if (!container) return;
+                container.innerHTML = `
+                    <div class="no-reviews">
+                        <i class="fas fa-comment-slash"></i>
+                        <p>Aún no hay reseñas. ¡Sé el primero en compartir tu experiencia!</p>
+                    </div>
+                `;
+            }
+
+            // Función para agregar una nueva reseña a la interfaz
+            function addNewReviewToUI(review) {
+                const reviewsContainer = document.querySelector('.grid-reseñas');
+                if (!reviewsContainer) return;
+                
+                const user = getCurrentUser();
+                const reviewDate = review.createdAt ? new Date(review.createdAt) : new Date();
+                const formattedDate = reviewDate.toLocaleDateString('es-MX', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // Crear elemento de reseña
+                const reviewElement = document.createElement('div');
+                reviewElement.className = 'reseña-tarjeta';
+                if (review.userEmail) {
+                    reviewElement.setAttribute('data-email', review.userEmail);
+                }
+                
+                // Crear estrellas de calificación
+                let stars = '';
+                const rating = parseInt(review.rating) || 0;
+                for (let i = 1; i <= 5; i++) {
+                    if (i <= rating) {
+                        stars += '<i class="fas fa-star"></i>';
+                    } else if (i - 0.5 <= rating) {
+                        stars += '<i class="fas fa-star-half-alt"></i>';
+                    } else {
+                        stars += '<i class="far fa-star"></i>';
+                    }
+                }
+                
+                // Plantilla de la reseña
+                reviewElement.innerHTML = `
+                    <div class="reseña-encabezado">
+                        <div class="reseña-usuario">
+                            <i class="fas fa-user-circle"></i>
+                            <span>${review.userName || 'Usuario anónimo'}</span>
+                        </div>
+                        <div class="reseña-fecha">${formattedDate}</div>
+                    </div>
+                    <div class="reseña-cuerpo">
+                        <h3>${review.experience || 'Experiencia en lugares'}</h3>
+                        <p>${review.comment || ''}</p>
+                    </div>
+                    <div class="reseña-calificacion" title="${rating} de 5 estrellas">
+                        ${stars}
+                    </div>
+                `;
+                
+                // Agregar la reseña al contenedor
+                reviewsContainer.prepend(reviewElement);
+            }
+            
+            // Función para actualizar la interfaz del formulario de reseña
+            function updateReviewFormUI(user) {
+                const reviewForm = document.getElementById('review-form');
+                const loginPrompt = document.getElementById('login-prompt');
+                
+                if (!reviewForm || !loginPrompt) return;
+                
+                if (user) {
+                    // Usuario autenticado
+                    loginPrompt.style.display = 'none';
+                    reviewForm.style.display = 'block';
+                    
+                    // Verificar si el usuario ya ha dejado una reseña
+                    const userEmail = user.email || '';
+                    const userHasReviewed = document.querySelector(`.reseña-tarjeta[data-email="${userEmail}"]`);
+                    
+                    if (userHasReviewed) {
+                        // El usuario ya tiene una reseña, mostrar mensaje
+                        reviewForm.innerHTML = `
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Ya has dejado una reseña. ¡Gracias por compartir tu experiencia!</span>
+                            </div>
+                        `;
+                    } else {
+                        // Mostrar formulario para nueva reseña
+                        reviewForm.innerHTML = `
+                            <h3>Comparte tu experiencia</h3>
+                            <form id="new-review-form">
+                                <div class="form-group">
+                                    <label for="review-experience">Título de tu experiencia</label>
+                                    <input type="text" id="review-experience" class="form-control" value="Mi experiencia en lugares" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Calificación</label>
+                                    <div class="estrellas-calificacion">
+                                        <i class="far fa-star" data-rating="1"></i>
+                                        <i class="far fa-star" data-rating="2"></i>
+                                        <i class="far fa-star" data-rating="3"></i>
+                                        <i class="far fa-star" data-rating="4"></i>
+                                        <i class="far fa-star" data-rating="5"></i>
+                                        <input type="hidden" id="review-rating" name="rating" value="5" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="review-comment">Tu reseña</label>
+                                    <textarea id="review-comment" class="form-control" rows="4" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Enviar reseña</button>
+                            </form>
+                        `;
+                        
+                        // Configurar manejador de eventos para las estrellas
+                        const stars = document.querySelectorAll('.estrellas-calificacion i');
+                        stars.forEach(star => {
+                            star.addEventListener('click', function() {
+                                const rating = parseInt(this.getAttribute('data-rating'));
+                                document.getElementById('review-rating').value = rating;
+                                
+                                // Actualizar la visualización de las estrellas
+                                stars.forEach((s, index) => {
+                                    if (index < rating) {
+                                        s.classList.remove('far');
+                                        s.classList.add('fas');
+                                    } else {
+                                        s.classList.remove('fas');
+                                        s.classList.add('far');
+                                    }
+                                });
+                            });
+                        });
+                        
+                        // Configurar envío del formulario
+                        const form = document.getElementById('new-review-form');
+                        if (form) {
+                            form.addEventListener('submit', async function(e) {
+                                e.preventDefault();
+                                
+                                const experience = document.getElementById('review-experience').value.trim();
+                                const rating = document.getElementById('review-rating').value;
+                                const comment = document.getElementById('review-comment').value.trim();
+                                
+                                if (!experience || !rating || !comment) {
+                                    alert('Por favor completa todos los campos');
+                                    return;
+                                }
+                                
+                                try {
+                                    const response = await fetch('http://localhost:27017/api/reviews', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Accept': 'application/json'
+                                        },
+                                        credentials: 'include',
+                                        body: JSON.stringify({
+                                            experience: experience,
+                                            rating: parseInt(rating),
+                                            comment: comment
+                                        })
+                                    });
+                                    
+                                    const data = await response.json();
+                                    
+                                    if (response.ok && data.success) {
+                                        // Recargar las reseñas
+                                        await loadReviews();
+                                        
+                                        // Limpiar el formulario
+                                        form.reset();
+                                        
+                                        // Mostrar mensaje de éxito
+                                        alert('¡Gracias por tu reseña! Ha sido publicada correctamente.');
+                                    } else {
+                                        throw new Error(data.message || 'Error al publicar la reseña');
+                                    }
+                                } catch (error) {
+                                    console.error('Error al enviar la reseña:', error);
+                                    alert('Ocurrió un error al enviar tu reseña. Por favor, inténtalo de nuevo.');
+                                }
+                            });
+                        }
+                    }
+                } else {
+                    // Usuario no autenticado
+                    loginPrompt.style.display = 'block';
+                    reviewForm.style.display = 'none';
+                }
+            }
+
+            // Manejar clics en los enlaces de autenticación del formulario de reseñas
+            document.addEventListener('click', function(e) {
+                if (e.target && (e.target.id === 'show-login-lugares' || e.target.id === 'show-register-lugares')) {
+                    e.preventDefault();
+                    modal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Mostrar el formulario correspondiente
+                    if (e.target.id === 'show-register-lugares') {
+                        loginFormContainer.style.display = 'none';
+                        registerFormContainer.style.display = 'block';
+                    } else {
+                        loginFormContainer.style.display = 'block';
+                        registerFormContainer.style.display = 'none';
+                    }
+                }
+            });
+
+            // Manejar envío del formulario de reseñas
+            const reviewForm = document.getElementById('form-reseña');
+            if (reviewForm) {
+                reviewForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    if (!isAuthenticated()) {
+                        updateReviewFormVisibility(false);
+                        return;
+                    }
+                    
+                    // Aquí iría el código para enviar la reseña al servidor
+                    const titulo = document.getElementById('titulo').value;
+                    const calificacion = document.querySelector('input[name="calificacion"]:checked').value;
+                    const comentario = document.getElementById('comentario').value;
+                    
+                    // Simular envío exitoso
+                    console.log('Reseña enviada:', { titulo, calificacion, comentario });
+                    
+                    // Mostrar mensaje de éxito
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Gracias por tu reseña!',
+                        text: 'Tu experiencia ha sido publicada exitosamente.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    
+                    // Limpiar el formulario
+                    reviewForm.reset();
+                });
+            }
+        }); // Cierre del addEventListener DOMContentLoaded
+    </script>
+</body>
+</html>

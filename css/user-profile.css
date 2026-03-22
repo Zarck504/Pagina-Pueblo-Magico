@@ -1,0 +1,105 @@
+/* Estilos para el perfil de usuario en la barra de navegación */
+.login-required-message {
+    display: none;
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    border: 1px solid #ffeeba;
+}
+
+.auth-link {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+.review-form {
+    display: none;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    padding: 5px 0;
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.user-profile span {
+    color: #fff;
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+}
+
+/* Ajustes para el menú de navegación */
+.nav-links > li {
+    position: relative;
+}
+
+/* Mostrar el menú de perfil al hacer hover */
+.user-profile:hover .user-menu {
+    display: block;
+}
+
+/* Estilos para el formulario de reseña */
+.formulario-reseña {
+    background: #fff;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    margin-top: 30px;
+}
+
+.formulario-reseña h3 {
+    color: #2c3e50;
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+
+/* Ajustes responsivos */
+@media (max-width: 768px) {
+    .user-profile {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 10px;
+    }
+    
+    .logout-btn {
+        padding: 8px 0;
+    }
+}

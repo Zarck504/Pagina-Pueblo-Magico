@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eventos - Huasca de Ocampo</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Estilos específicos para la página de eventos */
+        .eventos-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .filtros {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .filtro-btn {
+            background: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 8px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filtro-btn:hover, .filtro-btn.activo {
+            background: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+        
+        .calendario-mes {
+            margin: 40px 0;
+        }
+        
+        .mes-titulo {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        
+        .dias-semana {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #555;
+        }
+        
+        .dias {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+        
+        .dia {
+            aspect-ratio: 1;
+            border: 1px solid #eee;
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-end;
+            padding: 5px;
+            position: relative;
+            min-height: 80px;
+        }
+        
+        .dia.otro-mes {
+            color: #ccc;
+            background-color: #f9f9f9;
+        }
+        
+        .dia.hoy {
+            background-color: #e3f2fd;
+            font-weight: bold;
+        }
+        
+        .dia.evento::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 6px;
+            height: 6px;
+            background-color: #e74c3c;
+            border-radius: 50%;
+        }
+        
+        .evento-destacado {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .evento-imagen {
+            flex: 1;
+            min-width: 300px;
+            height: 250px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .evento-imagen img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .evento-info {
+            flex: 2;
+            padding: 0 30px;
+            min-width: 300px;
+        }
+        
+        .evento-fecha {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .evento-titulo {
+            font-size: 1.8em;
+            margin: 10px 0;
+        }
+        
+        .evento-descripcion {
+            margin: 15px 0;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .evento-detalle {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+        }
+        
+        .evento-detalle i {
+            width: 25px;
+            color: #e74c3c;
+            margin-right: 10px;
+            text-align: center;
+        }
+        
+        .btn-evento {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 15px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .btn-evento:hover {
+            background: #c0392b;
+        }
+        
+        .lista-eventos {
+            margin-top: 50px;
+        }
+        
+        .evento-item {
+            display: flex;
+            margin-bottom: 30px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .evento-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .evento-item-img {
+            width: 200px;
+            height: 180px;
+            flex-shrink: 0;
+        }
+        
+        .evento-item-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .evento-item-info {
+            padding: 20px;
+            flex-grow: 1;
+        }
+        
+        .evento-item-titulo {
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+        
+        .evento-item-fecha {
+            color: #e74c3c;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+        
+        .evento-item-descripcion {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 768px) {
+            .evento-destacado {
+                flex-direction: column;
+            }
+            
+            .evento-imagen {
+                width: 100%;
+                margin-bottom: 20px;
+            }
+            
+            .evento-info {
+                padding: 0;
+            }
+            
+            .evento-item {
+                flex-direction: column;
+            }
+            
+            .evento-item-img {
+                width: 100%;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Modal de inicio de sesión/registro -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <!-- Formulario de Inicio de Sesión -->
+            <div id="loginFormContainer">
+                <h2 style="text-align: center; margin-bottom: 25px;">Iniciar Sesión</h2>
+                <form id="loginFormModal">
+                    <div class="form-group">
+                        <label for="modalUsername">Usuario o Correo Electrónico</label>
+                        <input type="text" id="modalUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalPassword">Contraseña</label>
+                        <input type="password" id="modalPassword" name="password" required>
+                    </div>
+                    <button type="submit" class="btn-login">Iniciar Sesión</button>
+                    <div class="register-link">
+                        ¿No tienes una cuenta? <a href="#" id="showRegister">Regístrate</a>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Formulario de Registro -->
+            <div id="registerFormContainer" style="display: none;">
+                <h2 style="text-align: center; margin-bottom: 25px;">Crear Cuenta</h2>
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="regName">Nombre Completo</label>
+                        <input type="text" id="regName" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regEmail">Correo Electrónico</label>
+                        <input type="email" id="regEmail" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regUsername">Nombre de Usuario</label>
+                        <input type="text" id="regUsername" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regPassword">Contraseña</label>
+                        <input type="password" id="regPassword" name="password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Confirmar Contraseña</label>
+                        <input type="password" id="regConfirmPassword" name="confirmPassword" required>
+                    </div>
+                    <button type="submit" class="btn-login">Registrarse</button>
+                    <div class="register-link">
+                        ¿Ya tienes una cuenta? <a href="#" id="showLogin">Iniciar Sesión</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <header>
+        <nav>
+            <div class="logo">Huasca Mágica</div>
+            <div class="nav-right">
+                <div class="nav-pill">
+                    <div class="nav-pill-container">
+                        <a href="../index.html#inicio" class="nav-pill-btn">Inicio</a>
+                        <a href="lugares.html" class="nav-pill-btn">Lugares</a>
+                        <a href="gastronomia.html" class="nav-pill-btn">Gastronomía</a>
+                        <a href="eventos.html" class="nav-pill-btn">Eventos</a>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 400 60"
+                          height="60"
+                          width="400"
+                          overflow="visible"
+                          class="nav-pill-outline"
+                        >
+                          <rect
+                            stroke-width="5"
+                            fill="transparent"
+                            height="60"
+                            width="400"
+                            y="0"
+                            x="0"
+                            pathLength="100"
+                            class="nav-pill-rect"
+                          ></rect>
+                        </svg>
+                    </div>
+                </div>
+                <div id="loginButtonContainer">
+                    <a href="#" id="loginBtn" class="login-btn"><i class="fas fa-sign-in-alt"></i> Iniciar Sesión</a>
+                    <a href="#" id="logoutBtn" class="login-btn" style="display: none; background-color: #dc3545;">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <div class="hero" style="background: #000;">
+            <div class="hero-video-wrapper">
+                <video class="hero-video" src="../eventos.mp4" autoplay muted loop playsinline></video>
+                <div class="hero-video-overlay"></div>
+            </div>
+            <div class="hero-content">
+                <h1>Eventos en Huasca</h1>
+                <p>Festivales, ferias, música y tradiciones que llenan de vida cada temporada en este Pueblo Mágico.</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="eventos-container">
+        <section class="filtros">
+            <button class="filtro-btn activo">Todos</button>
+            <button class="filtro-btn">Culturales</button>
+            <button class="filtro-btn">Gastronómicos</button>
+            <button class="filtro-btn">Musicales</button>
+            <button class="filtro-btn">Tradicionales</button>
+        </section>
+
+        <section class="evento-destacado">
+            <div class="evento-imagen">
+                <img src="../img/fiesta-patronal.jpg" alt="Fiesta Patronal de Huasca">
+            </div>
+            <div class="evento-info">
+                <span class="evento-fecha">15 - 24 de Diciembre, 2025</span>
+                <h2 class="evento-titulo">Fiesta Patronal de Huasca</h2>
+                <p class="evento-descripcion">Celebra la fiesta más importante del año en honor al Santo Patrono de Huasca. Disfruta de eventos religiosos, culturales, juegos mecánicos, fuegos artificiales y la deliciosa gastronomía local.</p>
+                
+                <div class="evento-detalle">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span>Plaza Principal de Huasca de Ocampo</span>
+                </div>
+                <div class="evento-detalle">
+                    <i class="far fa-clock"></i>
+                    <span>Todo el día</span>
+                </div>
+                <div class="evento-detalle">
+                    <i class="fas fa-tag"></i>
+                    <span>Evento gratuito</span>
+                </div>
+                
+                <a href="#" class="btn-evento">Más Información</a>
+            </div>
+        </section>
+
+        <section class="calendario-mes">
+            <h2 class="mes-titulo">Diciembre 2025</h2>
+            <div class="dias-semana">
+                <div>Dom</div>
+                <div>Lun</div>
+                <div>Mar</div>
+                <div>Mié</div>
+                <div>Jue</div>
+                <div>Vie</div>
+                <div>Sáb</div>
+            </div>
+            <div class="dias" id="calendario-dias">
+                <!-- Los días se generarán con JavaScript -->
+            </div>
+        </section>
+
+        <section class="lista-eventos">
+            <h2>Próximos Eventos</h2>
+            
+            <div class="evento-item">
+                <div class="evento-item-img">
+                    <img src="https://images.unsplash.com/photo-1556911073-38141963c4e4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1374&q=80" alt="Feria Gastronómica">
+                </div>
+                <div class="evento-item-info">
+                    <span class="evento-item-fecha">5 de Diciembre, 2025 | 12:00 PM</span>
+                    <h3 class="evento-item-titulo">Feria Gastronómica de Invierno</h3>
+                    <p class="evento-item-descripcion">Disfruta de los sabores típicos de la temporada en esta feria que reúne a los mejores cocineros tradicionales de la región.</p>
+                    <a href="#" class="btn-evento">Ver detalles</a>
+                </div>
+            </div>
+            
+            <div class="evento-item">
+                <div class="evento-item-img">
+                    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1469&q=80" alt="Concierto Navideño">
+                </div>
+                <div class="evento-item-info">
+                    <span class="evento-item-fecha">20 de Diciembre, 2025 | 7:00 PM</span>
+                    <h3 class="evento-item-titulo">Concierto Navideño en la Plaza</h3>
+                    <p class="evento-item-descripcion">Disfruta de un espectáculo musical con villancicos tradicionales y piezas clásicas de la temporada.</p>
+                    <a href="#" class="btn-evento">Ver detalles</a>
+                </div>
+            </div>
+            
+            <div class="evento-item">
+                <div class="evento-item-img">
+                    <img src="https://images.unsplash.com/photo-1575425186775-b8def18ac0d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Taller Artesanal">
+                </div>
+                <div class="evento-item-info">
+                    <span class="evento-item-fecha">12 de Diciembre, 2025 | 10:00 AM</span>
+                    <h3 class="evento-item-titulo">Taller de Artesanías Navideñas</h3>
+                    <p class="evento-item-descripcion">Aprende a crear hermosas decoraciones navideñas con materiales reciclados y tradicionales.</p>
+                    <a href="#" class="btn-evento">Ver detalles</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección de Experiencias de Visitantes -->
+        <section class="seccion-reseñas">
+            <div class="contenedor-reseñas">
+                <h2 class="titulo-seccion">Experiencias en Eventos</h2>
+                
+                <div class="grid-reseñas" id="event-reviews-container">
+                    <!-- Las reseñas se cargarán aquí dinámicamente -->
+                    <div class="loading-reviews">
+                        <p>Cargando experiencias...</p>
+                    </div>
+                </div>
+
+                <!-- Formulario para dejar reseña -->
+                <div class="formulario-reseña" id="formulario-reseña">
+                    <div class="u-form-area">
+                        <p class="u-form-title">Comparte tu experiencia en eventos</p>
+                        <div id="login-required-message" class="login-required-message">
+                            <p>Para publicar una reseña, por favor <a href="#" id="show-login-eventos" class="auth-link u-form-link">inicia sesión</a> o <a href="#" id="show-register-eventos" class="auth-link u-form-link">regístrate</a>.</p>
+                        </div>
+                        <form id="form-reseña" class="review-form" style="display: none;">
+                            <div class="u-form-group">
+                                <label class="u-form-subtitle" for="evento">Evento al que asististe</label>
+                                <select class="u-form-style" id="evento" name="evento" required>
+                                    <option value="">Selecciona un evento</option>
+                                    <option value="festival-trucha">Festival de la Trucha</option>
+                                    <option value="noche-leyendas">Noche de Leyendas</option>
+                                    <option value="taller-barro">Taller de Artesanías en Barro</option>
+                                    <option value="feria-artesanal">Feria Artesanal</option>
+                                    <option value="otro">Otro evento</option>
+                                </select>
+                            </div>
+                            <div class="u-form-group">
+                                <label class="u-form-subtitle" for="titulo">Título de tu reseña</label>
+                                <input class="u-form-style" type="text" id="titulo" name="titulo" required>
+                            </div>
+                            <div class="u-form-group">
+                                <label class="u-form-subtitle">Calificación</label>
+                                <div class="calificacion-grupo">
+                                    <div class="estrellas-calificacion">
+                                        <input type="radio" id="eventos-estrella5" name="calificacion" value="5">
+                                        <label for="eventos-estrella5" title="5 estrellas">★</label>
+                                        <input type="radio" id="eventos-estrella4" name="calificacion" value="4">
+                                        <label for="eventos-estrella4" title="4 estrellas">★</label>
+                                        <input type="radio" id="eventos-estrella3" name="calificacion" value="3" checked>
+                                        <label for="eventos-estrella3" title="3 estrellas">★</label>
+                                        <input type="radio" id="eventos-estrella2" name="calificacion" value="2">
+                                        <label for="eventos-estrella2" title="2 estrellas">★</label>
+                                        <input type="radio" id="eventos-estrella1" name="calificacion" value="1">
+                                        <label for="eventos-estrella1" title="1 estrella">★</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="u-form-group">
+                                <label class="u-form-subtitle" for="comentario">Tu experiencia</label>
+                                <textarea class="u-form-style" id="comentario" name="comentario" required></textarea>
+                            </div>
+                            <div class="u-form-group">
+                                <label class="u-form-subtitle" for="fotos">Subir fotos (opcional)</label>
+                                <input class="u-form-style" type="file" id="fotos" name="fotos" multiple accept="image/*">
+                            </div>
+                            <button type="submit" class="u-form-btn">Publicar reseña</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer id="contacto">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Oficina de Turismo</h3>
+                <p>Plaza Principal s/n, Centro</p>
+                <p>Huasca de Ocampo, Hidalgo</p>
+                <p>Email: turismo@huasca.gob.mx</p>
+                <p>Tel: 771 123 4567</p>
+            </div>
+            <div class="footer-section">
+                <h3>¿Quieres promocionar tu evento?</h3>
+                <p>Envíanos la información a:</p>
+                <p>eventos@huascamagica.com</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Huasca de Ocampo, Pueblo Mágico - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <!-- Modal de Inicio de Sesión -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 style="text-align: center; margin-bottom: 25px;">Iniciar Sesión</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">Usuario o Correo Electrónico</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn-login">Iniciar Sesión</button>
+                <div class="register-link">
+                    ¿No tienes una cuenta? <a href="#" id="showRegister">Regístrate</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Script para el calendario
+        function generarCalendario() {
+            const contenedor = document.getElementById('calendario-dias');
+            const fecha = new Date(2025, 11, 1); // Diciembre 2025
+            const mes = fecha.getMonth();
+            const año = fecha.getFullYear();
+            
+            // Obtener el primer día del mes (0-6, donde 0 es domingo)
+            let primerDia = new Date(año, mes, 1).getDay();
+            
+            // Obtener el último día del mes
+            const ultimoDia = new Date(año, mes + 1, 0).getDate();
+            
+            // Obtener el último día del mes anterior
+            const ultimoDiaMesAnterior = new Date(año, mes, 0).getDate();
+            
+            // Limpiar el contenedor
+            contenedor.innerHTML = '';
+            
+            // Días del mes anterior
+            for (let i = primerDia - 1; i >= 0; i--) {
+                const diaElemento = document.createElement('div');
+                diaElemento.className = 'dia otro-mes';
+                diaElemento.textContent = ultimoDiaMesAnterior - i;
+                contenedor.appendChild(diaElemento);
+            }
+            
+            // Días del mes actual
+            const hoy = new Date();
+            for (let dia = 1; dia <= ultimoDia; dia++) {
+                const diaElemento = document.createElement('div');
+                diaElemento.className = 'dia';
+                diaElemento.textContent = dia;
+                
+                // Marcar el día actual
+                if (dia === hoy.getDate() && mes === hoy.getMonth() && año === hoy.getFullYear()) {
+                    diaElemento.classList.add('hoy');
+                }
+                
+                // Marcar días con eventos (ejemplo: días 5, 12, 15, 20, 24)
+                if ([5, 12, 15, 20, 24].includes(dia)) {
+                    diaElemento.classList.add('evento');
+                    diaElemento.title = 'Evento programado';
+                }
+                
+                contenedor.appendChild(diaElemento);
+            }
+            
+            // Calcular cuántos días del próximo mes mostrar
+            const totalCeldas = Math.ceil((primerDia + ultimoDia) / 7) * 7;
+            const diasRestantes = totalCeldas - (primerDia + ultimoDia);
+            
+            // Días del próximo mes
+            for (let i = 1; i <= diasRestantes; i++) {
+                const diaElemento = document.createElement('div');
+                diaElemento.className = 'dia otro-mes';
+                diaElemento.textContent = i;
+                contenedor.appendChild(diaElemento);
+            }
+        }
+        
+        // Funciones de autenticación
+        function isAuthenticated() {
+            return localStorage.getItem('isAuthenticated') === 'true';
+        }
+
+        function getCurrentUser() {
+            const user = localStorage.getItem('user');
+            return user ? JSON.parse(user) : null;
+        }
+
+        function setAuthState(authenticated, userData = null) {
+            localStorage.setItem('isAuthenticated', authenticated);
+            if (userData) {
+                localStorage.setItem('user', JSON.stringify(userData));
+                updateUserProfileUI(userData);
+                updateReviewFormVisibility(true);
+            } else {
+                localStorage.removeItem('user');
+                updateUserProfileUI(null);
+                updateReviewFormVisibility(false);
+            }
+        }
+
+        function updateUserProfileUI(user) {
+            const userProfile = document.getElementById('userProfile');
+            const loginBtn = document.getElementById('loginBtn');
+            
+            if (user && userProfile) {
+                userProfile.innerHTML = `
+                    <div class="user-profile">
+                        <span class="user-name">${user.name}</span>
+                        <button id="logoutBtn" class="btn-logout">Cerrar Sesión</button>
+                    </div>
+                `;
+                
+                if (loginBtn) loginBtn.style.display = 'none';
+                userProfile.style.display = 'block';
+                
+                // Manejar cierre de sesión
+                document.getElementById('logoutBtn').addEventListener('click', function() {
+                    setAuthState(false);
+                    window.location.reload();
+                });
+            } else if (loginBtn) {
+                loginBtn.style.display = 'block';
+                if (userProfile) userProfile.style.display = 'none';
+            }
+        }
+
+        // Función para actualizar la visibilidad del formulario de reseñas
+        function updateReviewFormVisibility(isAuthenticated) {
+            const loginMessage = document.getElementById('login-required-message');
+            const reviewForm = document.getElementById('form-reseña');
+            
+            if (isAuthenticated) {
+                if (loginMessage) loginMessage.style.display = 'none';
+                if (reviewForm) reviewForm.style.display = 'block';
+            } else {
+                if (loginMessage) loginMessage.style.display = 'block';
+                if (reviewForm) reviewForm.style.display = 'none';
+            }
+        }
+
+        // Generar el calendario cuando se cargue la página
+        document.addEventListener('DOMContentLoaded', function() {
+            generarCalendario();
+            
+            // Configuración del modal de inicio de sesión/registro
+            const modal = document.getElementById('loginModal');
+            const loginBtn = document.getElementById('loginBtn');
+            const closeBtn = document.querySelector('.close');
+            const showRegister = document.getElementById('showRegister');
+            const showLogin = document.getElementById('showLogin');
+            const loginForm = document.getElementById('loginFormModal');
+            const registerForm = document.getElementById('registerForm');
+            const loginFormContainer = document.getElementById('loginFormContainer');
+            const registerFormContainer = document.getElementById('registerFormContainer');
+
+            // Mostrar modal de inicio de sesión
+            if (loginBtn) {
+                loginBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    modal.style.display = 'block';
+                    loginFormContainer.style.display = 'block';
+                    registerFormContainer.style.display = 'none';
+                    document.body.style.overflow = 'hidden';
+                });
+            }
+
+            // Cerrar modal
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+
+            // Cerrar al hacer clic fuera del modal
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }
+            });
+
+            // Manejar envío del formulario de inicio de sesión
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const username = document.getElementById('modalUsername').value;
+                    const password = document.getElementById('modalPassword').value;
+                    
+                    try {
+                        const response = await fetch('http://localhost:27017/api/login', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            credentials: 'include',
+                            body: JSON.stringify({
+                                username: username,
+                                password: password
+                            })
+                        });
+
+                        const data = await response.json();
+                        
+                        if (response.ok) {
+                            // Login exitoso
+                            setAuthState(true, data.user || { 
+                                name: username,
+                                email: username.includes('@') ? username : `${username}@example.com`,
+                                token: data.token
+                            });
+                            
+                            // Cerrar el modal
+                            modal.style.display = 'none';
+                            document.body.style.overflow = 'auto';
+                            
+                            // Limpiar el formulario
+                            loginForm.reset();
+                            
+                            // Mostrar mensaje de éxito
+                            showAlert('success', '¡Bienvenido!', 'Has iniciado sesión correctamente');
+                        } else {
+                            // Mostrar error
+                            throw new Error(data.message || 'Error al iniciar sesión');
+                        }
+                    } catch (error) {
+                        console.error('Error al iniciar sesión:', error);
+                        showAlert('error', 'Error', error.message || 'No se pudo iniciar sesión. Intenta de nuevo.');
+                    }
+                });
+            }
+
+            // Manejar envío del formulario de registro
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const name = document.getElementById('regName').value;
+                    const email = document.getElementById('regEmail').value;
+                    
+                    // Simular registro exitoso
+                    setAuthState(true, { 
+                        name: name, 
+                        email: email 
+                    });
+                    
+                    // Cerrar el modal
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                    
+                    // Mostrar mensaje de éxito
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Registro exitoso!',
+                        text: 'Bienvenido a Huasca Mágica',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    
+                    // Limpiar el formulario
+                    registerForm.reset();
+                });
+            }
+            
+            // Filtros de eventos
+            const botonesFiltro = document.querySelectorAll('.filtro-btn');
+            botonesFiltro.forEach(boton => {
+                boton.addEventListener('click', function() {
+                    // Remover clase activa de todos los botones
+                    botonesFiltro.forEach(btn => btn.classList.remove('activo'));
+                    // Agregar clase activa al botón clickeado
+                    this.classList.add('activo');
+                    // Aquí iría la lógica para filtrar los eventos
+                    console.log('Filtrar por:', this.textContent);
+                });
+            });
+
+
+            // Cerrar modal
+            if (closeBtn) {
+                closeBtn.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                });
+            }
+
+            // Cerrar al hacer clic fuera del modal
+            window.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+
+            // Cambiar a formulario de registro
+            if (showRegister) {
+                showRegister.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loginFormContainer.style.display = 'none';
+                    registerFormContainer.style.display = 'block';
+                });
+            }
+
+            // Cambiar a formulario de inicio de sesión
+            if (showLogin) {
+                showLogin.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loginFormContainer.style.display = 'block';
+                    registerFormContainer.style.display = 'none';
+                });
+            }
+
+            // Manejar clics en los enlaces de autenticación del formulario de reseñas
+            document.addEventListener('click', function(e) {
+                if (e.target && (e.target.id === 'show-login-eventos' || e.target.id === 'show-register-eventos')) {
+                    e.preventDefault();
+                    modal.style.display = 'block';
+                    document.body.style.overflow = 'hidden';
+                    
+                    // Mostrar el formulario correspondiente
+                    if (e.target.id === 'show-register-eventos') {
+                        loginFormContainer.style.display = 'none';
+                        registerFormContainer.style.display = 'block';
+                    } else {
+                        loginFormContainer.style.display = 'block';
+                        registerFormContainer.style.display = 'none';
+                    }
+                }
+            });
+
+            // Manejar envío del formulario de reseñas
+            const reviewForm = document.getElementById('form-reseña');
+            if (reviewForm) {
+                reviewForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    
+                    if (!isAuthenticated()) {
+                        updateReviewFormVisibility(false);
+                        return;
+                    }
+                    
+                    // Aquí iría el código para enviar la reseña al servidor
+                    const evento = document.getElementById('evento').value;
+                    const titulo = document.getElementById('titulo').value;
+                    const calificacion = document.querySelector('input[name="calificacion"]:checked').value;
+                    const comentario = document.getElementById('comentario').value;
+                    
+                    // Simular envío exitoso
+                    console.log('Reseña de evento enviada:', { evento, titulo, calificacion, comentario });
+                    
+                    // Mostrar mensaje de éxito
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Gracias por tu reseña!',
+                        text: 'Tu experiencia en el evento ha sido publicada exitosamente.',
+                        timer: 2000,
+                        showConfirmButton: false
+                    });
+                    
+                    // Limpiar el formulario
+                    reviewForm.reset();
+                });
+            }
+
+            // Inicializar visibilidad del formulario de reseñas
+            updateReviewFormVisibility(isAuthenticated());
+            
+            // Verificar estado de autenticación al cargar la página
+            if (isAuthenticated()) {
+                const user = getCurrentUser();
+                if (user) {
+                    updateUserProfileUI(user);
+                }
+            }
+        });
+    </script>
+    <!-- Incluir SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Incluir auth.js -->
+    <script src="../js/auth.js"></script>
+    
+    <script>
+        // Función para formatear la fecha
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            return new Date(dateString).toLocaleDateString('es-MX', options);
+        }
+
+        // Función para crear el HTML de una reseña
+        function createReviewHTML(review) {
+            const stars = '★'.repeat(review.rating) + '☆'.repeat(5 - review.rating);
+            const formattedDate = formatDate(review.createdAt);
+            
+            return `
+                <article class="reseña-tarjeta" data-review-id="${review._id}" data-user-id="${review.userId}">
+                    <div class="reseña-cabecera">
+                        <div class="reseña-avatar">
+                            ${review.userAvatar ? 
+                                `<img src="${review.userAvatar}" alt="${review.userName}">` :
+                                `<i class="fas fa-user-circle"></i>`
+                            }
+                        </div>
+                        <div class="reseña-info">
+                            <h4>${review.userName || 'Usuario'}</h4>
+                            <div class="reseña-fecha">${formattedDate}</div>
+                        </div>
+                    </div>
+                    <div class="reseña-calificacion" title="${review.rating} de 5 estrellas">
+                        ${stars}
+                    </div>
+                    <h3>${review.title || 'Sin título'}</h3>
+                    <p class="reseña-texto">${review.comment || 'Sin comentario'}</p>
+                    ${review.eventId ? `<p class="reseña-evento">Evento: ${review.eventName || 'No especificado'}</p>` : ''}
+                    <div class="reseña-acciones">
+                        <button class="like-btn" data-review-id="${review._id}">
+                            <i class="far fa-thumbs-up"></i> <span>${review.likes?.length || 0}</span>
+                        </button>
+                        <button class="comment-btn">
+                            <i class="far fa-comment"></i> <span>${review.comments?.length || 0}</span>
+                        </button>
+                    </div>
+                </article>
+            `;
+        }
+
+        // Función para cargar las reseñas de eventos
+        async function loadEventReviews() {
+            const container = document.getElementById('event-reviews-container');
+            if (!container) return;
+
+            try {
+                const response = await fetch('http://localhost:27017/api/reviews?type=event');
+                if (!response.ok) {
+                    throw new Error('Error al cargar las reseñas');
+                }
+                
+                const data = await response.json();
+                const reviews = Array.isArray(data) ? data : [];
+                
+                if (!reviews || reviews.length === 0) {
+                    container.innerHTML = `
+                        <div class="no-reviews">
+                            <i class="fas fa-comment-slash"></i>
+                            <p>Aún no hay reseñas. ¡Sé el primero en compartir tu experiencia!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                container.innerHTML = reviews.map(createReviewHTML).join('');
+                
+            } catch (error) {
+                console.error('Error al cargar reseñas:', error);
+                container.innerHTML = `
+                    <div class="error-loading">
+                        <p>No se pudieron cargar las experiencias. Por favor, intenta de nuevo más tarde.</p>
+                        <button onclick="loadEventReviews()" class="btn-reload">Reintentar</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Cargar las reseñas cuando el documento esté listo
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEventReviews();
+            
+            // Configurar el formulario de reseñas
+            const reviewForm = document.getElementById('form-reseña');
+            if (reviewForm) {
+                reviewForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const user = getCurrentUser();
+                    if (!user) {
+                        showAlert('error', 'No autenticado', 'Debes iniciar sesión para publicar una reseña');
+                        return;
+                    }
+                    
+                    // Get form values directly from elements to ensure we have the latest values
+                    const title = document.getElementById('titulo').value.trim();
+                    const comment = document.getElementById('comentario').value.trim();
+                    const ratingInput = document.querySelector('input[name="calificacion"]:checked');
+                    const rating = ratingInput ? ratingInput.value : '3';
+                    const eventSelect = document.getElementById('evento');
+                    const eventId = eventSelect ? eventSelect.value : '';
+                    const eventName = eventSelect ? eventSelect.options[eventSelect.selectedIndex].text : '';
+                    
+                    // Validate required fields
+                    if (!title || !comment) {
+                        showAlert('error', 'Campos requeridos', 'Por favor completa todos los campos obligatorios');
+                        return;
+                    }
+                    
+                    if (!eventId) {
+                        showAlert('error', 'Evento requerido', 'Por favor selecciona un evento');
+                        return;
+                    }
+                    
+                    try {
+                        const response = await fetch('http://localhost:27017/api/reviews', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${user.token}`
+                            },
+                            body: JSON.stringify({
+                                userId: user.id || user._id,
+                                userName: user.name || user.username,
+                                userEmail: user.email,
+                                userAvatar: user.avatar,
+                                rating: parseInt(rating),
+                                title: title,
+                                comment: comment,
+                                type: 'event',
+                                eventId: eventId,
+                                eventName: eventName
+                            })
+                        });
+                        
+                        const result = await response.json();
+                        
+                        if (!response.ok) {
+                            throw new Error(result.message || 'Error al publicar la reseña');
+                        }
+                        
+                        // Recargar las reseñas
+                        await loadEventReviews();
+                        
+                        // Limpiar el formulario
+                        reviewForm.reset();
+                        
+                        // Mostrar mensaje de éxito
+                        showAlert('success', '¡Reseña publicada!', 'Gracias por compartir tu experiencia');
+                        
+                    } catch (error) {
+                        console.error('Error al publicar la reseña:', error);
+                        showAlert('error', 'Error', error.message || 'No se pudo publicar la reseña');
+                    }
+                });
+            }
+        });
+        
+        // Función para mostrar alertas
+        function showAlert(icon, title, text) {
+            return Swal.fire({
+                icon: icon,
+                title: title,
+                text: text,
+                confirmButtonText: 'Aceptar',
+                confirmButtonColor: '#3085d6'
+            });
+        }
+    </script>
+    
+    <style>
+        .loading-reviews,
+        .no-reviews,
+        .error-loading {
+            text-align: center;
+            padding: 2rem;
+            grid-column: 1 / -1;
+            color: #666;
+        }
+        
+        .btn-reload {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        
+        .btn-reload:hover {
+            background-color: #45a049;
+        }
+        
+        .reseña-evento {
+            font-style: italic;
+            color: #666;
+            margin: 0.5rem 0;
+            font-size: 0.9em;
+        }
+    </style>
+</body>
+</html>
